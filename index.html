@@ -10,123 +10,161 @@
 		<!-- Bootstrap core CSS -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 		<style>
-			.con {
-			  display: table;
-			  height:80px;
-			  cursor:default;
+			.carddiv {
+			  display:table;
+			  height: 180px;
 			}
 			
-			.tag {
-			  text-align:center;
-			  background-color:#477abd;
-			  color:white;
-			  display: table-cell; 
-			  vertical-align: middle;
-			  cursor:pointer;
+			.chosen {
+				margin-top:-5px;
 			}
 			
-			.label {
-			  text-align:center;
-			  display: table-cell; 
-			  vertical-align: middle;
+			.card {
+				text-align:center;
+				background-color:yellow;
+				display: table-cell; 
+				vertical-align: middle;
+				font-size:20px;
+				cursor:pointer;
+			}
+			
+			.q {
+				text-align:center;
+				background-color:blue;
+				color:white;
 			}
 		</style>
 	</head>
 	  <body style="margin:0px;padding:0px;overflow:hidden">
-	  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+	  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 	  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 	  <script src="https://d.line-scdn.net/liff/1.0/sdk.js"></script>
-	  <div class="container-fluid">
-		<div class="row">
-			<div class="p-1 col-5 label">
-				HI
-			<div>
-			<div class="col-2"/>
-			<div class="p-1 col-5 con">
-				<div class="tag rounded">
-					
-				</div>
-			</div>
+	  
+	  <div class="container">
+		<div id="functioncontainer" class="row my-2">
+		</div>
+		<div id="questioncontainer" class="row my-2">
+		</div>
+		<div id="cardcontainer" class="row my-2">
 		</div>
 	  </div>	    	
-	  
-		<script>
-		var msg = {  
-          "type": "flex",
-          "altText": "李常受文集追求進度填寫",
-          "contents": {
-			  "type": "bubble",
-			  "body": {
-				"type": "box",
-				"layout": "vertical",
-				"spacing": "lg",
-				"contents": [
-				  {
-					"type": "text",
-					"text": "書報追求個人進度表",
-					"align": "center",
-					"weight": "bold"
-				  },
-				  {
-					"type": "button",
-					"action": {
-					  "type": "uri",
-					  "label": "李常受文集",
-					  "uri": "line://app/1613006452-8eraeKkK?key=cache&title=%E6%9D%8E%E5%B8%B8%E5%8F%97%E6%96%87%E9%9B%86%E8%BF%BD%E6%B1%82%E9%80%B2%E5%BA%A6%E8%A1%A8&url=https://script.google.com/a/g.ntu.edu.tw/macros/s/AKfycbxce7otOy4no-PmxAHobqYstMmms8ej069xxoLPjKri-D0VwzJd/exec"
-					},
-					"style": "primary",
-					"color": "#003F00"
-				  },
-				  {
-					"type": "button",
-					"action": {
-					  "type": "uri",
-					  "label": "恢復本聖經",
-					  "uri": "line://app/1613006452-8eraeKkK?key=biblecache&title=%E6%81%A2%E5%BE%A9%E6%9C%AC%E8%81%96%E7%B6%93%E8%BF%BD%E6%B1%82%E9%80%B2%E5%BA%A6%E8%A1%A8&url=https://script.google.com/a/g.ntu.edu.tw/macros/s/AKfycbxce7otOy4no-PmxAHobqYstMmms8ej069xxoLPjKri-D0VwzJd/exec"
-					},
-					"style": "primary",
-					"color": "#111111"
-				  },
-				  {
-					"type": "button",
-					"action": {
-					  "type": "uri",
-					  "label": "生命讀經",
-					  "uri": "line://app/1613006452-8eraeKkK?key=lifestudycache&title=%E7%94%9F%E5%91%BD%E8%AE%80%E7%B6%93%E8%BF%BD%E6%B1%82%E9%80%B2%E5%BA%A6%E8%A1%A8&url=https://script.google.com/a/g.ntu.edu.tw/macros/s/AKfycbxce7otOy4no-PmxAHobqYstMmms8ej069xxoLPjKri-D0VwzJd/exec"
-					},
-					"style": "primary",
-					"color": "#55CF55"
-				  }
-				]
-			  }
+  
+	<script>
+	let info = {};
+	let sendanswer = [];
+	let gpid;// = "Ceceaf1587ded9b0a2023328de34b612c";
+	let userid;// = "Ubcc3072d00816610bb4301ffb542e103";
+	function getInfo()
+	{
+		$.get("https://script.google.com/macros/s/AKfycbzhYCyX9MR7oogP2d5gA8yLpOf0lnPxua_cgQ0jl_koauTpYdY/exec", { gpid:gpid, userid:userid },function(data,status,xhr){
+			info = JSON.parse(data);
+			if(typeof info.error !=='undefined')
+			{
+				$("#cardcontainer").html(info.error);
 			}
-		};
-		
-			$(document).ready(function(){
-				liff.init(
-				  data => {
-						/*
-						// Now you can call LIFF API
-						const userId = data.context.userId;                   
-						liff.getProfile()
-						.then(profile => {
-						  const name = profile.displayName;
-						})
-						.catch((err) => {
-						});
-						*/
-						liff.sendMessages([msg])
-						.then(() => {
-						  liff.closeWindow();
-						})
-						.catch((err) => {
-						});				  
-				},
-				  err => {
-				  }
-				);
+			else 
+			{
+				$("#questioncontainer").html("<div class='q col-11'>Q"+info.no+":"+info.question.name+"（出"+info.question.num+"張牌）</div>");
+				
+				let sendbtn = $("<button onclick='send()'>送出</button>");
+				$("#questioncontainer").append(sendbtn);
+				
+				$("#cardcontainer").empty();
+				
+				for(let i=0;i<info.cards.length;i++)
+				{
+					let card = $("<div class='card' cid='"+info.cards[i].id+"' style='height:100%;width:100%'>"+info.cards[i].content+"</div>");
+					let carddiv = $("<div class='col-2 carddiv px-1 mt-3' ></div>");
+					card.click(function(){		
+						if($(this).hasClass("chosen"))
+						{
+							$(this).removeClass("chosen");
+							$(this).parent().addClass("mt-3");														
+							sendanswer.splice(sendanswer.indexOf(card.attr('cid')),1);
+						}
+						else if(sendanswer.length<info.question.num)					
+						{
+							$(this).addClass("chosen");
+							$(this).parent().removeClass("mt-3");														
+							sendanswer.push(card.attr('cid'));
+						}						
+						marktag();
+					});
+
+					carddiv.append(card);
+					$("#cardcontainer").append(carddiv);
+					
+				}								
+			}
+		});
+	}
+	getInfo();
+
+	function send()
+	{
+		if(sendanswer.length == info.question.num)
+		{
+			$.post("https://script.google.com/macros/s/AKfycbzhYCyX9MR7oogP2d5gA8yLpOf0lnPxua_cgQ0jl_koauTpYdY/exec", {method:"answer", gpid:gpid, userid:userid,answer:sendanswer },
+			function(data,status,xhr){
+				let d = JSON.parse(data);
+				if(d.result)
+				{
+					finish();
+				}
+				else 
+				{
+					alert("有點問題");
+				}
 			});
+		}
+	}
+	
+	function marktag()
+	{		
+		$(".tag").remove();
+		for(let i = 0;i<sendanswer.length;i++)
+		{
+			$(".chosen[cid='"+sendanswer[i]+"']").append("<div class='tag'>"+(i+1)+"</div>");
+		}
+	}
+	
+	function finish()
+	{
+		liff.sendMessages([{"type":"text","text":"我好了"}])
+		.then(() => {
+			liff.closeWindow();
+			})
+		.catch((err) => {});				  
+	}
+	
+	$(document).ready(function(){			
+		
+		liff.init(
+		  data => {
+				const urlParams = new URLSearchParams(window.location.search);				
+			    gpid = urlParams.get('gpid');
+				userid = data.context.userId;                   
+
+		  		info = getInfo(no,gpid,userid);
+
+
+				/*
+				// Now you can call LIFF API
+				const userId = data.context.userId;                   
+				liff.getProfile()
+				.then(profile => {
+				  const name = profile.displayName;
+				})
+				.catch((err) => {
+				});
+				*/
+				
+		},
+		  err => {
+		  }
+		);
+	});
 		</script>
 	</body>
 </html>
