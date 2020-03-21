@@ -65,7 +65,7 @@
 			{
 				$("#questioncontainer").html("<div class='q col-11'>Q"+info.no+":"+info.question.name+"（出"+info.question.num+"張牌）</div>");
 				
-				let sendbtn = $("<button onclick='send()'>送出</button>");
+				let sendbtn = $("<div class='col-1'><button onclick='send()'>送出</button></div>");
 				$("#questioncontainer").append(sendbtn);
 				
 				$("#cardcontainer").empty();
